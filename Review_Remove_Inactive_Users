@@ -1,0 +1,18 @@
+# Connect to Azure AD
+Connect-AzureAD
+
+# Get all users in Azure AD
+$users = Get-AzureADUser -All $true
+
+# Review and remove inactive users (not logged in for 90 days)
+$inactiveDays = 90
+$today = Get-Date
+
+foreach ($user in $users) {
+    $userId = $user.ObjectId
+    $lastSignIn = $user.LastSignInDateTime
+
+    if ($lastSignIn -lt ($today.AddDays(-$inactiveDays))) {
+        Remove-AzureADUser -ObjectId $userId -Force
+    }
+}

@@ -1,0 +1,11 @@
+# Connect to Azure AD
+Connect-AzureAD
+
+# Get all users in Azure AD
+$users = Get-AzureADUser -All $true
+
+# Enable MFA for each user
+foreach ($user in $users) {
+    $userId = $user.ObjectId
+    Enable-AzureADUserMFA -ObjectId $userId
+}
